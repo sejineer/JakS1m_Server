@@ -1,6 +1,7 @@
 import { createError } from "../error";
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
   try {
@@ -35,6 +36,13 @@ export const signin = async (req, res, next) => {
     if (!isCorrect) {
       return next(createError(400, "비밀번호가 일치하지 않습니다"));
     }
+    const token = jwt.sign({ id: user._id }, process.env.JWT);
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json(user);
   } catch (err) {
     next(err);
   }

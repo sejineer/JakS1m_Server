@@ -1,11 +1,13 @@
 import express from "express";
 import morgan from "morgan";
-import authRoutes from "./routes/authRoutes";
+import authRoutes from "./routes/authRoute";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const logger = morgan("dev");
 
 app.use(logger);
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);

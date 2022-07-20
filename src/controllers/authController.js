@@ -2,6 +2,7 @@ import { createError } from "../error";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import fetch from "cross-fetch";
 
 export const signup = async (req, res, next) => {
   try {
@@ -45,5 +46,52 @@ export const signin = async (req, res, next) => {
       .json(user);
   } catch (err) {
     next(err);
+  }
+};
+
+export const startKakaoLogin = (req, res) => {
+  const host = "https://kauth.kakao.com/oauth/authorize";
+  const config = {
+    client_id: process.env.KAKAO_KEY,
+    redirect_uri: "http://localhost:8800/api/auth/kakao/finish",
+    response_type: "code",
+  };
+  const params = new URLSearchParams(config).toString();
+  const url = `${host}?${params}`;
+  return res.redirect(url);
+};
+
+export const finishKakaoLogin = async (req, res) => {
+  const host = "https://kauth.kakao.com/oauth/token";
+  const config = {
+    grant_type: "authorization_code",
+    client_id: process.env.KAKAO_KEY,
+    redirect_uri: "http://localhost:8800/api/auth/kakao/finish",
+    code: req.query.code,
+    client_secret: process.env.KAKAO_SECRET,
+  };
+  const params = new URLSearchParams(config).toString();
+  const url = `${host}?${params}`;
+  const tokenRequset = await (
+    await fetch(url, {
+      method: "POST",
+      headers: {
+        Content_type: "application/json",
+      },
+    })
+  ).json();
+  if ("access_token" in tokenRequset) {
+    const { access_token } = tokenRequset;
+    const url = "https://kapi.kakao.com/v2/user/me";
+    const userData = await (
+      await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+    ).json();
+    console.log(userData);
+  } else {
+    return res.redirect("/");
   }
 };

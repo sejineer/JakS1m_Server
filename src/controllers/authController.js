@@ -20,7 +20,7 @@ export const signup = async (req, res, next) => {
       password,
       name,
     });
-    return res.status(200).send("회원가입 되었습니다");
+    return res.status(200).send("success");
   } catch (err) {
     next(err);
   }
@@ -49,24 +49,12 @@ export const signin = async (req, res, next) => {
   }
 };
 
-// export const startKakaoLogin = (req, res) => {
-//   const host = "https://kauth.kakao.com/oauth/authorize";
-//   const config = {
-//     client_id: process.env.KAKAO_KEY,
-//     redirect_uri: "http://localhost:8800/api/auth/kakao/finish",
-//     response_type: "code",
-//   };
-//   const params = new URLSearchParams(config).toString();
-//   const url = `${host}?${params}`;
-//   return res.redirect(url);
-// };
-
 export const loginWithKakao = async (req, res) => {
   const host = "https://kauth.kakao.com/oauth/token";
   const config = {
     grant_type: "authorization_code",
     client_id: process.env.KAKAO_KEY,
-    redirect_uri: "http://localhost:8800/api/auth/kakao/login",
+    redirect_uri: "http://localhost:3000/join/oauth/kakao",
     code: req.query.code,
     client_secret: process.env.KAKAO_SECRET,
   };

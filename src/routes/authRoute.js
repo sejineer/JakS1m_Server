@@ -13,6 +13,5 @@ authRoutes.post("/signup", signup);
 //SIGN IN
 authRoutes.post("/signin", signin);
 
-// authRoutes.get("/kakao/start", startKakaoLogin);
 authRoutes.post("/kakao/login", loginWithKakao);
 export default authRoutes;

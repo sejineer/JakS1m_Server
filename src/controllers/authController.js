@@ -79,7 +79,7 @@ export const loginWithKakao = async (req, res) => {
       })
     ).json();
     console.log(userData);
-    console.log(userData.find(email));
+    console.log(userData.find(properties.nickname));
   //   await User.create({
   //     email: userData.email,
   //     password: "",

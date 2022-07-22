@@ -80,7 +80,7 @@ export const loginWithKakao = async (req, res) => {
     ).json();
     console.log(userData);
     await User.create({
-      email: userData.kakao_account.email,
+      email: userData.email,
       password: "",
       name: userData.kakao_account.name,
       fromKakao: true,

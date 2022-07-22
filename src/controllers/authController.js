@@ -69,41 +69,5 @@ export const loginWithKakao = async (req, res, next) => {
         },
       })
     ).json();
-    if ("access_token" in tokenRequset) {
-      const { access_token } = tokenRequset;
-      const url = "https://kapi.kakao.com/v2/user/me";
-      const userData = await (
-        await fetch(url, {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        })
-      ).json();
-      console.log(userData);
-      if (!userData.kakao_account.has_email) {
-        return next(createError(404, "이메일이 존재하지 않습니다."));
-      }
-      let user = await User.findOne({ email: userData.kakao_account.email });
-      if (!user) {
-        user = await User.create({
-          email: userData.kakao_account.email,
-          password: "",
-          img: userData.properties.profile_image,
-          name: userData.kakao_account.profile.nickname,
-          fromKakao: true,
-        });
-      }
-      const token = jwt.sign({ id: user._id }, process.env.JWT);
-      res
-        .cookie("access_token", token, {
-          httpOnly: true,
-        })
-        .status(200)
-        .json(user);
-    } else {
-      return next(createError(404, "Access Token이 존재하지 않습니다."));
-    }
-  } catch (err) {
-    next(err);
   }
 };

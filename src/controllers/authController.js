@@ -55,13 +55,13 @@ export const loginWithKakao = async (req, res) => {
     grant_type: "authorization_code",
     client_id: process.env.KAKAO_KEY,
     redirect_uri: "http://localhost:3000/join/oauth/kakao",
-    code: req.query.code,
+    code: req.body.code,
     client_secret: process.env.KAKAO_SECRET,
   };
   const params = new URLSearchParams(config).toString();
-  const url = `${host}?${params}`;
+  const tokenRequestUrl = `${host}?${params}`;
   const tokenRequset = await (
-    await fetch(url, {
+    await fetch(tokenRequestUrl, {
       method: "POST",
       headers: {
         Content_type: "application/json",
@@ -79,6 +79,12 @@ export const loginWithKakao = async (req, res) => {
       })
     ).json();
     console.log(userData);
+    await User.create({
+      email: userData.kakao_account.email,
+      password: "",
+      name: userData.kakao_account.name,
+      fromKakao: true,
+    });
   } else {
     return res.redirect("/");
   }

@@ -78,15 +78,14 @@ export const loginWithKakao = async (req, res) => {
         },
       })
     ).json();
-    console.log(userData.email);
-    console.log(userData.name);
-    await User.create({
-      email: userData.email,
-      password: "",
-      name: userData.name,
-      fromKakao: true,
-    });
-  } else {
+    console.log(userData);
+  //   await User.create({
+  //     email: userData.email,
+  //     password: "",
+  //     name: userData.name,
+  //     fromKakao: true,
+  //   });
+  // } else {
     return res.redirect("/");
   }
 };

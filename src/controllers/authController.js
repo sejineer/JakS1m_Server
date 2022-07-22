@@ -79,6 +79,8 @@ export const loginWithKakao = async (req, res) => {
       })
     ).json();
     console.log(userData);
+    console.log(userData.kakao_account.name);
+    console.log(userData.find(kakao_account.name));
   //   await User.create({
   //     email: userData.email,
   //     password: "",
@@ -86,6 +88,11 @@ export const loginWithKakao = async (req, res) => {
   //     fromKakao: true,
   //   });
   // } else {
-    return res.redirect("/");
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json(userData);
   }
 };

@@ -3,6 +3,7 @@ import {
   signin,
   signup,
   loginWithKakao,
+  loginWithNaver,
 } from "../controllers/authController";
 
 const authRoutes = express.Router();
@@ -13,5 +14,10 @@ authRoutes.post("/signup", signup);
 //SIGN IN
 authRoutes.post("/signin", signin);
 
+//LOGIN WITH KAKAO
 authRoutes.post("/kakao/login", loginWithKakao);
+
+//LOGIN WITH NAVER
+authRoutes.get("/naver/login", loginWithNaver);
+
 export default authRoutes;

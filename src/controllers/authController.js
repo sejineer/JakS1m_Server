@@ -6,20 +6,19 @@ import fetch from "cross-fetch";
 
 export const signup = async (req, res, next) => {
   try {
-    const { email, password, password1, name } = req.body;
+    const { password, password1 } = req.body;
     if (password !== password1) {
       return next(createError(400, "비밀번호가 일치하지 않습니다."));
     }
-    const isExist = await User.exists({ email });
-    console.log(isExist);
+    const isExist = await User.exists({ email: req.body.email });
     if (isExist) {
       return next(createError(400, "이미 존재하는 이메일입니다."));
     }
-    await User.create({
-      email,
-      password,
-      name,
-    });
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    const newUser = new User({ ...req.body, password: hash });
+
+    await newUser.save();
     return res.status(200).send("success");
   } catch (err) {
     next(err);

@@ -18,6 +18,6 @@ authRoutes.post("/signin", signin);
 authRoutes.post("/kakao/login", loginWithKakao);
 
 //LOGIN WITH NAVER
-authRoutes.get("/naver/login", loginWithNaver);
+authRoutes.post("/naver/login", loginWithNaver);
 
 export default authRoutes;

@@ -37,7 +37,7 @@ export const signin = async (req, res, next) => {
       return next(createError(400, "비밀번호가 일치하지 않습니다"));
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT);
-    res
+    return res
       .cookie("access_token", token, {
         httpOnly: true,
       })
@@ -93,7 +93,7 @@ export const loginWithKakao = async (req, res, next) => {
         });
       }
       const token = jwt.sign({ id: user._id }, process.env.JWT);
-      res
+      return res
         .cookie("access_token", token, {
           httpOnly: true,
         })
@@ -146,7 +146,7 @@ export const loginWithNaver = async (req, res, next) => {
         });
       }
       const token = jwt.sign({ id: user._id }, process.env.JWT);
-      res
+      return res
         .cookie("access_token", token, {
           httpOnly: true,
         })

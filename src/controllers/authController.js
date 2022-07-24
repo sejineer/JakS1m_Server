@@ -109,7 +109,6 @@ export const loginWithKakao = async (req, res, next) => {
 
 export const loginWithNaver = async (req, res, next) => {
   try {
-    console.log(req.body.code, req.body.state);
     const host = "https://nid.naver.com/oauth2.0/token";
     const config = {
       grant_type: "authorization_code",
